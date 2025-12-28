@@ -10,7 +10,7 @@ const app = express();
 /* ================= CORS ================= */
 app.use(
   cors({
-    origin: "https://tubular-entremet-720837.netlify.app/",
+    origin: "https://tubular-entremet-720837.netlify.app",
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
@@ -19,7 +19,7 @@ app.use(
 /* ===== SAFE PREFLIGHT HANDLER (Node 22 FIX) ===== */
 app.use((req, res, next) => {
   if (req.method === "OPTIONS") {
-    res.header("Access-Control-Allow-Origin", "https://tubular-entremet-720837.netlify.app/");
+    res.header("Access-Control-Allow-Origin", "https://tubular-entremet-720837.netlify.app");
     res.header(
       "Access-Control-Allow-Headers",
       "Content-Type, Authorization"
