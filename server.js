@@ -7,17 +7,30 @@ dotenv.config();
 
 const app = express();
 
-/* ================= CORS (FINAL) ================= */
+/* ================= CORS ================= */
 app.use(
   cors({
     origin: "https://routinetodo.netlify.app",
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 
-app.options("*", (req, res) => {
-  res.sendStatus(204);
+/* ===== SAFE PREFLIGHT HANDLER (Node 22 FIX) ===== */
+app.use((req, res, next) => {
+  if (req.method === "OPTIONS") {
+    res.header("Access-Control-Allow-Origin", "https://routinetodo.netlify.app");
+    res.header(
+      "Access-Control-Allow-Headers",
+      "Content-Type, Authorization"
+    );
+    res.header(
+      "Access-Control-Allow-Methods",
+      "GET, POST, PUT, DELETE, OPTIONS"
+    );
+    return res.sendStatus(204);
+  }
+  next();
 });
 
 /* ================= MIDDLEWARE ================= */
@@ -26,7 +39,6 @@ app.use(express.json());
 /* ================= ROUTES ================= */
 app.use("/api/auth", require("./routes/authRoutes"));
 
-/* ================= TEST ================= */
 app.get("/api/test", (req, res) => {
   res.send("API OK");
 });
@@ -44,6 +56,6 @@ app.use((req, res) => {
 
 /* ================= SERVER ================= */
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () =>
-  console.log(`🚀 Server running on port ${PORT}`)
-);
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+});
