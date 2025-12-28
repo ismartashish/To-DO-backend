@@ -38,11 +38,11 @@ app.use(express.json());
 
 /* ================= ROUTES ================= */
 app.use("/api/auth", require("./routes/authRoutes"));
+app.use("/api/todo", require("./routes/todoRoutes"));
 
 app.get("/api/test", (req, res) => {
   res.send("API OK");
 });
-
 /* ================= DB ================= */
 mongoose
   .connect(process.env.MONGO_URI)
