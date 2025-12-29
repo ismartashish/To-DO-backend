@@ -11,6 +11,7 @@ const app = express();
 app.use(
   cors({
     origin: "https://whattoodoo.netlify.app",
+            "https://ismartashish.github.io/To-DO-frontend"
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
   })
