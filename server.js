@@ -8,32 +8,23 @@ dotenv.config();
 const app = express();
 
 /* ================= CORS ================= */
-app.use(
-  cors({
-    origin: "https://whattoodoo.netlify.app",
-            "https://to-do-frontend-roan-phi.vercel.app",
-            "https://ismartashish.github.io/To-DO-frontend"
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
+const allowedOrigins = [
+  "https://whattoodoo.netlify.app",
+  "https://to-do-frontend-roan-phi.vercel.app"
+];
 
-/* ===== SAFE PREFLIGHT HANDLER (Node 22 FIX) ===== */
-app.use((req, res, next) => {
-  if (req.method === "OPTIONS") {
-    res.header("Access-Control-Allow-Origin", "https://whattoodoo.netlify.app");
-    res.header(
-      "Access-Control-Allow-Headers",
-      "Content-Type, Authorization"
-    );
-    res.header(
-      "Access-Control-Allow-Methods",
-      "GET, POST, PUT, DELETE, OPTIONS"
-    );
-    return res.sendStatus(204);
-  }
-  next();
-});
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true); // allow mobile apps / Postman
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true
+}));
 
 /* ================= MIDDLEWARE ================= */
 app.use(express.json());
